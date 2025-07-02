@@ -1,4 +1,5 @@
 ﻿using Mediator.Contracts;
+using Mediator.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
 
@@ -21,14 +22,11 @@ public sealed class Mediator(IServiceProvider serviceProvider) : IMediator
         }
 
         var handler = serviceProvider.GetService(handlerType);
+        HandlerNotFoundException.ThrowIfHandlerNull(handler, requestType.Name);
 
-        return handler switch
-        {
-            null => throw new InvalidOperationException($"Handler for '{requestType.Name}' not found."),
-            _ => (Task)handlerType
+        return (Task)handlerType
                     .GetMethod("HandleAsync")?
-                    .Invoke(handler, [request, cancellationToken])!,
-        };
+                    .Invoke(handler, [request, cancellationToken])!;
     }
 
     public async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
@@ -44,14 +42,11 @@ public sealed class Mediator(IServiceProvider serviceProvider) : IMediator
         }
 
         var handler = serviceProvider.GetService(handlerType);
+        HandlerNotFoundException.ThrowIfHandlerNull(handler, requestType.Name);
 
-        return handler switch
-        {
-            null => throw new InvalidOperationException($"Handler for '{requestType.Name}' not found."),
-            _ => await (Task<TResponse>)handlerType
+        return await (Task<TResponse>)handlerType
                                 .GetMethod("HandleAsync")?
-                                .Invoke(handler, [request, cancellationToken])!,
-        };
+                                .Invoke(handler, [request, cancellationToken])!;
     }
 
     public async Task PublishAsync<TNotification>(TNotification notification, CancellationToken cancellationToken = default) where TNotification : INotification
