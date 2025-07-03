@@ -5,6 +5,6 @@ public sealed class PrintNotificationFirstHandler(TextWriter writer) : INotifica
     {
         var message = request.Message + " 1";
 
-        return writer.WriteLineAsync(message);
+        return writer.WriteAsync(message);
     }
 }

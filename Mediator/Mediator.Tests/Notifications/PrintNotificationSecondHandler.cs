@@ -5,6 +5,6 @@ public sealed class PrintNotificationSecondHandler(TextWriter writer) : INotific
     {
         var message = request.Message + " 2";
 
-        return writer.WriteLineAsync(message);
+        return writer.WriteAsync(message);
     }
 }

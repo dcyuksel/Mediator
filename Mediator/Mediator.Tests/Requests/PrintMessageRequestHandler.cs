@@ -3,6 +3,6 @@ public class PrintMessageRequestHandler(TextWriter writer) : IRequestHandler<Pri
 {
     public Task HandleAsync(PrintMessageRequest request, CancellationToken cancellationToken)
     {
-        return writer.WriteLineAsync(request.Message);
+        return writer.WriteAsync(request.Message);
     }
 }

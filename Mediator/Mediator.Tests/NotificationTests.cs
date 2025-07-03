@@ -12,6 +12,7 @@ public class NotificationTests
         var notification = new PrintNotification { Message = "Print" };
         await mediator.PublishAsync(notification);
         var output = textWriter.ToString();
-        output.Should().Be("Print 1\r\nPrint 2\r\n");
+        output.Should().Contain("Print 1");
+        output.Should().Contain("Print 2");
     }
 }

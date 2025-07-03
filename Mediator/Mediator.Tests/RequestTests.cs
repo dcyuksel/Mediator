@@ -12,7 +12,7 @@ public class RequestTests
         var request = new PrintMessageRequest { Message = "Print" };
         await mediator.SendAsync(request);
         var output = textWriter.ToString();
-        output.Should().Be("Print\r\n");
+        output.Should().Be("Print");
     }
 
     [Theory]
